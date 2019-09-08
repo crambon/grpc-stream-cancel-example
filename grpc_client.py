@@ -6,10 +6,13 @@ import message_pb2_grpc
 
 
 def stream(stub, key, key_stack):
+    # _Rendezvousオブジェクトを受け取る
     responses = stub.Stream(message_pb2.Request(key=key))
     for res in responses:
         if key not in key_stack:
-            res.cancel()
+            responses.cancel()
+            # これでもいい
+            # res.cancel()
     key_stack.discard(key)
 
 
